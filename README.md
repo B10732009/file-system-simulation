@@ -1,10 +1,10 @@
 # File System Simulation #
 
-## OBJECTIVES ##
+## Objectives ##
     
 `C programming` `pointers` `link-lists` `trees`
 
-## BACKGROUND (Unix File System Tree) ##
+## Background (Unix File System Tree) ##
 
 The logical organization of a Unix file system is a general tree, as shown by the following diagram.
 
@@ -22,7 +22,7 @@ For simplicity, we shall assume that the tree contains only `DIRs` and `FILEs`. 
 A general tree can be implemented as a binary tree. For each node, let childPtr point to the oldest child, and let siblingPtr point to the oldest sibling. For convenience, each node also has a parentPtr pointing to its parent node. For the root node, both parentPtr and siblingPtr point to itself.
 
 
-## REQUIREMENTS ##
+## Requirements ##
 
 1. Write a C program to simulate the Unix file system tree.
 
@@ -48,14 +48,16 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
     | quit | save the file system tree, then terminate the program |
 
 
-4. HELP INFO:
+4. Help Infos
     - NODE type : define a C struct for the NODE type:
+        
+        ```
+            64 chars      : name string of the node;
+            char          : node type : 'D' or 'F'
+            node pointers : *childPtr, *siblingPtr, *parentPtr;
+        ```
 
-                64 chars      : name string of the node;
-                char          : node type: 'D' or 'F'
-                node pointers : *childPtr, *siblingPtr, *parentPtr;
-
-    - Global variables:
+    - Global variables
 
         ```c
         NODE *root, *cwd;                             /* root and CWD pointers */
@@ -113,43 +115,43 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
 
         If the number of commands is small, e.g. only a few, it is OK to use a switch table, which is much better than a lot of `if .. else if ...`. For large number of commands, a table of **FUNCTION POINTERs** is usually used.
 
-    - Action functions: 
+    - Action functions
 
-        - HOW TO mkdir pathname:
+        - HOW TO mkdir pathname
 
             ```c
             mkdir(char *pathname)
             {
                 (1). Break up pathname into dirname and basename, e.g.
-                    ABSOLUTE: pathname=/a/b/c/d. Then dirname=/a/b/c, basename=d
-                    RELATIVE: pathname= a/b/c/d. Then dirname=a/b/c,  basename=d
+                    ABSOLUTE : pathname=/a/b/c/d. Then dirname=/a/b/c, basename=d
+                    RELATIVE : pathname= a/b/c/d. Then dirname=a/b/c,  basename=d
                     
-                (2). Search for the dirname node:
-                    ASSOLUTE pathname: search from /
-                    RELATIVE pathname: search from CWD.
+                (2). Search for the dirname node :
+                    ASSOLUTE pathname : search from /
+                    RELATIVE pathname : search from CWD.
 
                             if nonexist ==> error messages and return
                             if exist but not DIR ==> errot message and return
                         
-                (3). (dirname exists and is a DIR):
-                    Search for basename in (under) the dirname node:
+                (3). (dirname exists and is a DIR) :
+                    Search for basename in (under) the dirname node :
                             if already exists ==> error message and return;
             
                     ADD a new DIR node under dirname.
             }
             ```
 
-        - Similarly for other Action Functions
+        - Similarly for other action functions
 
-            - HOW TO rmdir pathname:
+            - HOW TO rmdir pathname
                 ```
                 (1). if pathname is absolute, start = /
                     else                     start = CWD --> current DIR node
-                (2). search for pathname node:
+                (2). search for pathname node :
                         tokenize pathname into components;
                         beginning from start, search for each component;
                         return ERROR if fails
-                (3). pathname exists: 
+                (3). pathname exists : 
                         check it's a DIR type;
                         check DIR is empty; can't rmdir if NOT empty;
                 (4). delete node from parent's child list;
@@ -206,33 +208,33 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
                 fclose(fp);                                 // close FILE stream when done
                 ```
 
-        - Save filename:
+        - Save filename
             Assume the file system tree is          
                 
             ```
-                        /
-                    ------------
-                    |     |    |
-                    A     B    C
-                    ---    |    |
-                    | |    z    E
-                    x y
+                    /
+                ------------
+                |     |    |
+                A     B    C
+                ---    |    |
+                | |    z    E
+                x y
             ```
    
             where A,B,C,D are DIRs and lower case names are FILEs
  
-            The tree can be represented by the (text) lines
+            The tree can be represented by the (text) lines :
             
             ```
                 type      path
                 ----- --------------
-                D    /A
-                F    /A/x
-                F    /A/y
-                D    /B
-                F    /B/z
-                D    /C
-                D    /C/E
+                D     /A
+                F     /A/x
+                F     /A/y
+                D     /B
+                F     /B/z
+                D     /C
+                D     /C/E
             ```
 
             The paths are generated by PRE-ORDER traversal of a binary tree : 
@@ -248,21 +250,21 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
             Read each line from a (saved) file and re-creates the file system tree.
 
 
-5. MORE HELPS
-    - Learn how to read Linux man pages:
+5. More Helps
+    - Learn how to read Linux man pages :
     
-    ```
-        /usr/man/------- man1 : commonly used commands: ls, cat, mkdir ....
-                    |--- man2 : system calls
-                    |--- man3 : library functions: strtok, strcat, basename, dirname
-                        etc.
-    ```
-    
-    Examples: 
-        - man ls     ==> show man pages of ls in man1
-        - man open   ==> show man page of open in man2
-        - man strtok ==> show man page of strtok in man 3, etc.
-        - man 3 dirname: show dirname in man3, NOT that of man1
+        ```
+            /usr/man/------- man1 : commonly used commands: ls, cat, mkdir ....
+                        |--- man2 : system calls
+                        |--- man3 : library functions: strtok, strcat, basename, dirname
+                            etc.
+        ```
+        
+        Examples : 
+            - man ls     ==> show man pages of ls in man1
+            - man open   ==> show man page of open in man2
+            - man strtok ==> show man page of strtok in man 3, etc.
+            - man 3 dirname : show dirname in man3, NOT that of man1
  
     -  Getline
         ```c
@@ -273,13 +275,13 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
         
 
 
-     - Assume: line[128] contains "mkdir /a/b/c/d", HOW TO extract token strings from line[ ]:
+     - Assume : line[128] contains "mkdir /a/b/c/d", HOW TO extract token strings from line[ ] :
         ```c
         char cmd[32], pathname[64];
-        sscanf(line, "%s %s", cmd, pathname);  // NOTE: NEED ADDRESSes
+        sscanf(line, "%s %s", cmd, pathname);  // NOTE : NEED ADDRESSes
         ```
     
-    - Assume char line[128], HOW TO write items to line[ ]:
+    - Assume char line[128], HOW TO write items to line[ ] :
         ```c
         sprintf(line, "%c %s %d", 'D',"namestring", 1234);
         ```
@@ -309,7 +311,7 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
         }
         ```
 
-    -  Function Pointers
+    -  Function pointers
         Assume :
         ```c
         int mkdir(char *pathname){..........}
@@ -317,6 +319,7 @@ A general tree can be implemented as a binary tree. For each node, let childPtr 
         etc.
         ```
         are FUNCTIONS in your program.
+
         ```c
                                         /*   0     1      2      3   4   5    6       7   8     9       10 */
         int (*fptr[ ])(char *) = {(int (*)())menu, mkdir, rmdir, ls, cd, pwd, create, rm, save, reload, quit};
